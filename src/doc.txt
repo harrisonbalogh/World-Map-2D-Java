@@ -1,0 +1,28 @@
+		   *Documentation*
+		     ST3_Data_Bro
+		   ================
+
+main.Startup
+	-> Where the main method resides
+	• Static reference to singleton MasterWindow
+	  and instantiates
+_________________
+user_interface.MasterWindow:
+	-> The applications primary UI window
+	• Contains the panel for 2D world rendering
+	  subclassed as HXViewPanel
+	• Adjustable constants for application window’s
+	  dimensions plus child HXViewPanel dimensions.
+_________________
+user_interface.mapComponent.MapPanel:
+	-> A subclass of JPanel that draws a map 
+	modeled after a real geographic map.
+	• Look through MapPanel for public methods to
+	  control the map. I.e. pan and zoom
+_________________
+data_model.*:
+	-> Study and DataPoint classes reside here.
+_________________
+database.*:
+	-> Currently empty. Needs database connection
+	   classes.
