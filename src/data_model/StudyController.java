@@ -34,7 +34,7 @@ public class StudyController {
     }
     public void saveStudy(){
         try {
-            PrintWriter pw = new PrintWriter(study.getTitle() + ".txt", "UTF-8");
+            PrintWriter pw = new PrintWriter("studies/" + study.getTitle() + ".txt", "UTF-8");
             pw.write("STUDYTITLE:START\r\n");
             pw.write(study.getTitle());
             pw.write("\r\n");

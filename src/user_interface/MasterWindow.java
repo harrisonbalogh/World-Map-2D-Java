@@ -193,7 +193,7 @@ public class MasterWindow extends JFrame {
 				int returnVal = jf.showOpenDialog(worldPanel);
 				if (returnVal == JFileChooser.APPROVE_OPTION){
 					File file = jf.getSelectedFile();
-					StudyBoundary studyBoundary = new StudyBoundary(file.getName());
+					StudyBoundary studyBoundary = new StudyBoundary(file.getAbsolutePath());
 					studyBoundary.pack();
 					studyBoundary.setVisible(true);
 				}
@@ -210,7 +210,7 @@ public class MasterWindow extends JFrame {
 		button_uploadStudy.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 			}
 		});
 		// Label attributes

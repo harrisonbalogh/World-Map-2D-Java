@@ -17,13 +17,15 @@ import java.util.ArrayList;
 public class SearchController {
     File folder;
     File[] files;
-    Path currentRelativePath = Paths.get("");
+    Path currentRelativePath = Paths.get("studies");
     String s = currentRelativePath.toAbsolutePath().toString();
     public SearchController(){
         folder = new File(s);
         files = folder.listFiles();
     }
     private boolean isRelevant(String line, String searchQuery){
+        line = line.toLowerCase();
+        searchQuery = searchQuery.toLowerCase();
         if (line.contains(searchQuery)){
             return true;
         }
@@ -33,20 +35,21 @@ public class SearchController {
         ArrayList<Study> relevantStudies = new ArrayList<>();
         for(File f: files){
             try{
-                BufferedReader br = new BufferedReader(new FileReader(f.getName()));
+                String fileName = f.getAbsolutePath();
+                BufferedReader br = new BufferedReader(new FileReader(fileName));
                 String line;
                 boolean relevant = false;
                 Study study = new Study();
                 line = br.readLine();
                 if (line.equals("STUDYTITLE:START")) {
                     while (!(line = br.readLine()).equals("STUDYTITLE:END")){
-                        relevant = isRelevant(line, searchQuery);
+                        if(!relevant)relevant = isRelevant(line, searchQuery);
                         study.setTitle(line);
                     }
                     line = br.readLine();
                     if(line.equals("AUTHORS:START")){
                         while (!(line = br.readLine()).equals("AUTHORS:END")){
-                            relevant = isRelevant(line, searchQuery);
+                            if(!relevant)relevant = isRelevant(line, searchQuery);
                             study.addAuthor(line);
                         }
                     }
@@ -61,7 +64,7 @@ public class SearchController {
                             }
                             else if(line.equals("TITLE:START")){
                                 line = br.readLine();
-                                relevant = isRelevant(line,searchQuery);
+                                if(!relevant)relevant = isRelevant(line,searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setTitle(line);
                                 study.changeDataPoint(dpNum, temp);
@@ -69,7 +72,7 @@ public class SearchController {
                             }
                             else if(line.equals("VALUE:START")){
                                 line = br.readLine();
-                                relevant = isRelevant(line,searchQuery);
+                                if(!relevant)relevant = isRelevant(line,searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setValue(Double.parseDouble(line));
                                 study.changeDataPoint(dpNum, temp);
@@ -77,7 +80,7 @@ public class SearchController {
                             }
                             else if(line.equals("UNIT:START")){
                                 line = br.readLine();
-                                relevant =isRelevant(line, searchQuery);
+                                if(!relevant)relevant =isRelevant(line, searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setUnit(line);
                                 study.changeDataPoint(dpNum, temp);
@@ -85,7 +88,7 @@ public class SearchController {
                             }
                             else if(line.equals("LATITUDE:START")){
                                 line = br.readLine();
-                                relevant = isRelevant(line, searchQuery);
+                                if(!relevant)relevant = isRelevant(line, searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setLatitude(Double.parseDouble(line));
                                 study.changeDataPoint(dpNum, temp);
@@ -93,7 +96,7 @@ public class SearchController {
                             }
                             else if(line.equals("LONGITUDE:START")){
                                 line = br.readLine();
-                                relevant = isRelevant(line, searchQuery);
+                                if(!relevant)relevant = isRelevant(line, searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setLongitude(Double.parseDouble(line));
                                 study.changeDataPoint(dpNum, temp);
@@ -101,7 +104,7 @@ public class SearchController {
                             }
                             else if(line.equals("ALTITUDE:START")){
                                 line = br.readLine();
-                                relevant = isRelevant(line, searchQuery);
+                                if(!relevant)relevant = isRelevant(line, searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setAltitude(Double.parseDouble(line));
                                 study.changeDataPoint(dpNum, temp);
@@ -109,7 +112,7 @@ public class SearchController {
                             }
                             else if(line.equals("DATETIME:START")){
                                 line = br.readLine();
-                                relevant = isRelevant(line, searchQuery);
+                                if(!relevant)relevant = isRelevant(line, searchQuery);
                                 DataPoint temp = study.getDataPoints().get(dpNum);
                                 temp.setDateTime(line);
                                 study.changeDataPoint(dpNum, temp);
@@ -117,10 +120,11 @@ public class SearchController {
                             }
                         }
                     }
+                    if(relevant){
+                        relevantStudies.add(study);
+                    }
                 }
-                if(relevant){
-                    relevantStudies.add(study);
-                }
+
             } catch (IOException e){
                 System.out.println("SOMETHING WENT WRONG");
             }
