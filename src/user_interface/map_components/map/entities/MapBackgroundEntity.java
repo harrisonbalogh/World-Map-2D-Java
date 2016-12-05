@@ -9,7 +9,6 @@ import user_interface.map_components.map.MapEntity;
 
 public class MapBackgroundEntity extends MapEntity {
 
-	private final int DEFAULT_WIDTH = 1425, DEFAULT_HEIGHT = 742;
 	private final int GRID_SPACE = 25;
 	private Boolean visibleGridLines = true;
 	
@@ -24,7 +23,7 @@ public class MapBackgroundEntity extends MapEntity {
 	 * @param w
 	 */
 	public MapBackgroundEntity(Map w) {
-		init(ImageLoader.image_map, 0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT, 1);
+		init(ImageLoader.image_map, 0, 0, w.getWidth(), w.getHeight(), 1);
 	}
 	
 	/**
@@ -46,11 +45,11 @@ public class MapBackgroundEntity extends MapEntity {
 				gridSpacing = 6.25;
 			}
 			// Draw lines from border to border
-			for (double x = gridSpacing; x < DEFAULT_WIDTH; x += gridSpacing) {
-				g.drawLine((int) (x * this.getScale()), 0, (int) (x * this.getScale()), (int) (DEFAULT_HEIGHT * this.getScale()));
+			for (double x = gridSpacing; x < getWidth(); x += gridSpacing) {
+				g.drawLine((int) (x * this.getScale()), 0, (int) (x * this.getScale()), (int) (getHeight() * this.getScale()));
 			}
-			for (double y = gridSpacing; y < DEFAULT_HEIGHT; y += gridSpacing) {
-				g.drawLine(0, (int) (y * this.getScale()), (int) (DEFAULT_WIDTH * this.getScale()), (int) (y * this.getScale()));
+			for (double y = gridSpacing; y < getHeight(); y += gridSpacing) {
+				g.drawLine(0, (int) (y * this.getScale()), (int) (getWidth() * this.getScale()), (int) (y * this.getScale()));
 			}
 		}
 	}

@@ -39,6 +39,8 @@ public class MapStudyPinEntity extends MapEntity implements Clickable{
 		xAvg /= dataPoints.length;
 		yAvg /= dataPoints.length;
 		
+		System.out.println("xAvg: " + xAvg + " yAvg: " + yAvg);
+		
 		init(ImageLoader.image_pin, xAvg, yAvg, DEFAULT_WIDTH, DEFAULT_HEIGHT, zoom);
 		
 		this.getRect().setBounds(

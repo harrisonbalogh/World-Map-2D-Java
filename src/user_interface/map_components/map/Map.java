@@ -16,9 +16,6 @@ public class Map {
 	private final CopyOnWriteArrayList<MapStudyPinEntity> pins = new CopyOnWriteArrayList<MapStudyPinEntity>();
 	private final MapBackgroundEntity background;
 	
-	// NYI: Will soon switch entities list above to this arraylist below
-//	private final ArrayList<Point> pinLocations = new ArrayList<Point>();
-	
 	/**
 	 * The HXWorld object owns all entities in a CopyOnWriteArrayList but is drawn in a HXWorldPanel.
 	 * <p>
@@ -88,22 +85,8 @@ public class Map {
 		pins.add(new MapStudyPinEntity(p, zoom));
 	}
 	
-	/**
-	 * Used by a WorldPanel class to mark visual pin on map
-	 * @param x
-	 * @param y
-	 * @param zoom
-	 */
-//	public void markPin(int x, int y, double zoom) {
-//		pins.add(new StudyPin(x, y, zoom));
-//	}
 	public void clearPins() {
 		pins.clear();
-	}
-	
-	public void updateSize(int w, int h) {
-		this.width = w;
-		this.height = h;
 	}
 
 	public int getWidth() {

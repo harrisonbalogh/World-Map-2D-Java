@@ -38,7 +38,7 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	private int mouse_y_last = 0;
 	
 	/* === world === */
-	private Map world;
+	private Map map;
 
 	/**
 	 * Extension of a JPanel that creates a map which draws map entities.
@@ -54,7 +54,7 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 		addComponentListener(this);
 		
 		this.camera = new MapCamera(this, RenderClock.CLOCK_HERTZ);
-		this.world = new Map(worldWidth, worldHeight);
+		this.map = new Map(worldWidth, worldHeight);
 		new RenderClock(this);
 	}
 	
@@ -84,7 +84,7 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 		g.translate(-camera.getCamera_x(), -camera.getCamera_y());
 //		g2d.scale(camera.getZoom(), camera.getZoom());
 		// Iterate backwards to draw in appropriate order
-		world.draw(g, interpolation);
+		map.draw(g, interpolation);
 	}
 	
 	/**
@@ -93,16 +93,32 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	 * The x and y coordinates should be a pixel coordinate from zero to the
 	 * bounds of the ST3WorldPanel component, regardless of zoom.
 	 * @param locs - The java.awt Point class location of marked points
+	 * @Joe Pass an array of Strings in the format of ["53 64", "39 102", "50 203"]
 	 */
-	public void markStudyWithDataPoints(Point[] locs) {
-		world.markDataLocations(locs, camera.getZoom());
+	public void markStudyWithDataPoints(String[] coordinates) {
+		// Parses x and y from the longitude latitude strings
+		Point[] locs = new Point[coordinates.length];
+		for (int c = 0; c < coordinates.length; c++) {
+			int spaceIndex = coordinates[c].indexOf(' ');
+			String parse1 = coordinates[c].substring(0, spaceIndex);
+			String parse2 = coordinates[c].substring(spaceIndex + 1);
+			int x = Integer.parseInt(parse1)%361;
+			int y = Integer.parseInt(parse2)%361;
+			x = (int) (((double) x/360) * map.getWidth());
+			y = (int) (((double) y/360) * map.getHeight());
+			
+			// Converts parsed integers to map coordinates.
+			locs[c] = new Point(x, y);
+		}
+		// Mark the parsed array of points
+		map.markDataLocations(locs, camera.getZoom());
 	}
 	
 	/**
 	 * Removes all the current pins marked on the map.
 	 */
 	public void clearPins() {
-		world.clearPins();
+		map.clearPins();
 	}
 	
 	/**
@@ -112,7 +128,7 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	 * world map. If false, grid lines will not be drawn.
 	 */
 	public void gridLinesVisibleToggle() {
-		world.backgroundMapGridLinesVisibleToggle();
+		map.backgroundMapGridLinesVisibleToggle();
 	}
 	
 	public void testPanTo(int x, int y) {
@@ -123,13 +139,13 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 		new Thread() {
 			public void run() {
 				for (int x = 0; x < 5; x++) {
-					int xLoc = Startup.rand.nextInt(world.getWidth());
-					int yLoc = Startup.rand.nextInt(world.getHeight());
+					int xLoc = Startup.rand.nextInt(map.getWidth());
+					int yLoc = Startup.rand.nextInt(map.getHeight());
 					camera.panTo(xLoc, yLoc);
 					try { Thread.sleep(320); } catch (InterruptedException e) { }
 					Point[] p = new Point[1];
 					p[0] = new Point(xLoc, yLoc);
-					world.markDataLocations(p, camera.getZoom());
+					map.markDataLocations(p, camera.getZoom());
 					try { Thread.sleep(100); } catch (InterruptedException e) { }
 				}
 			}
@@ -145,16 +161,16 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	}
 	
 	public void clearDataPins() {
-		world.clearPins();
+		map.clearPins();
 	}
 	
 	public void updateWorld() {
 		camera.updatePanning();
-		world.update();
+		map.update();
 	}
 	
 	public Map getWorld() {
-		return world;
+		return map;
 	}
 
 	public void repaintWorld(float withInterpolation) {
@@ -163,14 +179,14 @@ public class MapPanel extends JPanel implements MouseListener, MouseMotionListen
 	}
 	
 	public void updateWorldEntitiesScale(double s) {
-		world.updateEntitiesScale(s);
+		map.updateEntitiesScale(s);
 	}
 
 	/* ===================== Mouse Listener Methods ===================== */
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		world.mousePress(
+		map.mousePress(
 				e.getX() + camera.getCamera_x(), 
 				e.getY() + camera.getCamera_y());
 	}

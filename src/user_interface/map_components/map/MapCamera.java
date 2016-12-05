@@ -11,7 +11,7 @@ public class MapCamera {
 	private final int CAM_VEL_TERMINAL = 120; // - Maximum speed of drag panning
 	private final int CAM_FRICTION = 15; // - Deceleration of camera movement after mouse released in panning
 	private final double CAM_MODIFIER = 1; // - Used to amplify or suppress speed of drag panning
-	private final int CAM_VIEW_BORDER = 50; // - Allows camera to leave map bounds by this value on ea. side
+	private final int CAM_VIEW_BORDER = 57; // - Allows camera to leave map bounds by this value on ea. side
 	private final double CAM_PAN_TO_TIME = 0.25; // - Time it takes to pan to a given point (in seconds)
 	/* === Zooming === */
 	private final int ZOOM_MAX = 20;
@@ -97,6 +97,8 @@ public class MapCamera {
 	
 	/**
 	 * Called only by the updateWorld method in parent panel. Determinde by ST3Clock
+	 * <p>
+	 * Animates the panning of the map.
 	 */
 	public void updatePanning() {
 		// panTo takes precedence over dragPan
@@ -139,8 +141,12 @@ public class MapCamera {
 	private void borderCheck() {
 		double leftBorder  = parentPanel.getWidth()/2 - CAM_VIEW_BORDER * zoom;
 		double topBorder   = parentPanel.getHeight()/2 - CAM_VIEW_BORDER * zoom;
-		double rightBorder = (parentPanel.getWorld().getWidth() + CAM_VIEW_BORDER) * zoom - parentPanel.getWidth()/2;
-		double botBorder   = (parentPanel.getWorld().getHeight() + CAM_VIEW_BORDER) * zoom - parentPanel.getHeight()/2;
+		// FIX RIGHT AND BOT BORDER
+		double rightBorder = parentPanel.getWorld().getWidth() * zoom + CAM_VIEW_BORDER * zoom - parentPanel.getWidth()/2;
+		double botBorder   = parentPanel.getWorld().getHeight() * zoom + CAM_VIEW_BORDER * zoom - parentPanel.getHeight()/2;
+		
+//		System.out.println(camera_pos_x + " camera pos x with right border " + rightBorder);
+//		System.out.println((parentPanel.getWorld().getWidth() * zoom) + " worldWidth*zoom with parentWidth " + parentPanel.getWidth());
 		
 		if (camera_pos_x < leftBorder) {
 			camera_pos_x = (int) leftBorder;
