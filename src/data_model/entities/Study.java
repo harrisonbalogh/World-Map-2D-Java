@@ -18,7 +18,12 @@ public class Study {
         this.authors = authors;
         this.dataPoints = dataPoints;
     }
-
+    public Study(String studyTitle, String[] authors){
+        title = studyTitle;
+        for(String a: authors){
+            this.authors.add(a);
+        }
+    }
     public String getTitle() {
         return title;
     }
@@ -41,6 +46,11 @@ public class Study {
 
     public void setDataPoints(ArrayList<DataPoint> dataPoints) {
         this.dataPoints = dataPoints;
+    }
+    public void setDataPoints(DataPoint [] dataPoints){
+        for(DataPoint d: dataPoints){
+            this.dataPoints.add(d);
+        }
     }
     public void addDataPoint(DataPoint dp){
         dataPoints.add(dp);

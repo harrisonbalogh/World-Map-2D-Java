@@ -4,6 +4,7 @@ import data_model.SearchController;
 import data_model.StudyController;
 import data_model.entities.DataPoint;
 import data_model.entities.Study;
+import user_interface.map_components.MapPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,7 +76,9 @@ public class SearchBoundary extends JFrame{
             jp.setBorder(BorderFactory.createLineBorder(Color.red));
             jp.setVisible(true);
             scrollingBody.add(jp);
+            for(DataPoint dp : s.getDataPoints()){
 
+            }
         }
         scrollingBody.revalidate();
         scrollingBody.repaint();
@@ -98,6 +101,11 @@ public class SearchBoundary extends JFrame{
 
     }
     public SearchBoundary(){
+        initContent();
+    }
+    MapPanel mp;
+    public SearchBoundary(MapPanel mp){
+        this.mp = mp;
         initContent();
 
     }
