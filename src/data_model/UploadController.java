@@ -21,7 +21,7 @@ import java.util.Date;
 public class UploadController extends HttpServlet {
     // database connection settings
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/StudyDB/studydb";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/studydb";
     private static final String USER = "root";
     private static final String PASS = "nihon";
     private String sql;
@@ -110,13 +110,14 @@ public class UploadController extends HttpServlet {
                         double measurement = dataPoints[i].getValue();
                         String unit = dataPoints[i].getUnit();
                         String date = dataPoints[i].getDateTime();
+                        date = date.split(" ")[0];
                         double latitude = dataPoints[i].getLatitude();
                         double longitude = dataPoints[i].getLongitude();
                         double altitude = dataPoints[i].getAltitude();
                         //String	warning		=	dataPoints[i].getWarning();
 
                         // Code for adding a new data points to the database attached to the study
-                        sql = "INSERT INTO DataPoint (studyTitle, dpMeasurment, dpUnit, dpDate, dpLatitude, dpLongitude, dpAltitude) "
+                        sql = "INSERT INTO DataPoint (studyTitle, dpMeasurment, dpUnit, dpDate, dpLatitude, dpLongitde, dpAltitude) "
                                 + "VALUES('" + title + "'," + measurement + ", '" + unit + "', STR_TO_DATE('" + date + "', '%Y,%m,%d')," + latitude + ", " + longitude + "," + altitude + ")";
                         stmt.execute(sql);
                     }
@@ -231,7 +232,7 @@ public class UploadController extends HttpServlet {
                                             dataPoints.getInt("dpMeasurment"),
                                             dataPoints.getString("dpUnit"),
                                             dataPoints.getDouble("dpLatitude"),
-                                            dataPoints.getDouble("dpLongitude"),
+                                            dataPoints.getDouble("dpLongitde"),
                                             dataPoints.getDouble("dpAltitude"),
                                             dataPoints.getDate("dpDate").toString());
 

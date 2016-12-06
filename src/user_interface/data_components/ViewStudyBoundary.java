@@ -1,4 +1,4 @@
-package user_interface;
+package user_interface.data_components;
 
 import javax.swing.*;
 

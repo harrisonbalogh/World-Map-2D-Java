@@ -24,6 +24,8 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.awt.Color;
 
+import data_model.UploadController;
+import data_model.entities.Study;
 import main.ImageLoader;
 import main.Startup;
 import user_interface.data_components.SearchBoundary;
@@ -125,6 +127,7 @@ public class MasterWindow extends JFrame {
 		JButton button_loadStudy = new JButton("Load Study");
 		JButton button_search = new JButton("Search");
 		JButton button_uploadStudy = new JButton("Upload Study");
+		JButton button_retrieveStudies = new JButton("Retrieve Studies");
 		// Tooltips
 		button_clearAllPins.setToolTipText("Clear all data pins on the map.");
 		button_zoomOut.setToolTipText("Zoom map out.");
@@ -202,7 +205,7 @@ public class MasterWindow extends JFrame {
 		button_search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SearchBoundary searchBoundary = new SearchBoundary();
+				SearchBoundary searchBoundary = new SearchBoundary(worldPanel);
 				searchBoundary.pack();
 				searchBoundary.setVisible(true);
 			}
@@ -210,7 +213,14 @@ public class MasterWindow extends JFrame {
 		button_uploadStudy.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				final JFileChooser jf = new JFileChooser();
+				int returnVal = jf.showOpenDialog(worldPanel);
+				if (returnVal == JFileChooser.APPROVE_OPTION){
+					File file = jf.getSelectedFile();
+					UploadController uc = new UploadController();
+					Study study = new Study(file);
+					uc.uploadStudy(study);
+				}
 			}
 		});
 		// Label attributes

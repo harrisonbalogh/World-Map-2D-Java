@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -76,9 +78,24 @@ public class SearchBoundary extends JFrame{
             jp.setBorder(BorderFactory.createLineBorder(Color.red));
             jp.setVisible(true);
             scrollingBody.add(jp);
-            for(DataPoint dp : s.getDataPoints()){
-
-            }
+            jp.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    String[] points = new String[s.getDataPoints().size()];
+                    int i = 0;
+                    for(DataPoint dp : s.getDataPoints()){
+                        long lat = Math.round(dp.getLatitude());
+                        long lon = Math.round(dp.getLongitude());
+                        points[i] = lat + " " + lon;
+                        i++;
+                    }
+                    mp.markStudyWithDataPoints(points);
+                    StudyBoundary st = new StudyBoundary("studies/" + s.getTitle() + ".txt");
+                    st.pack();
+                    st.setVisible(true);
+                }
+            });
         }
         scrollingBody.revalidate();
         scrollingBody.repaint();
