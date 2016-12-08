@@ -27,6 +27,7 @@ public class UploadController extends HttpServlet {
     private String sql;
     private Connection conn = null;
     private Statement stmt = null;
+    private Statement stmt2 = null;
     // represents connection to database
     public boolean isConnected = false;
 
@@ -38,6 +39,7 @@ public class UploadController extends HttpServlet {
             if (conn != null)
                 isConnected = true;
             stmt = conn.createStatement();
+            stmt2 =conn.createStatement();
             //System.out.println("Connection Successful\n");		// prints statement if connection is successful
         } catch (SQLException sqle) {
             //Handle errors for JDBC
@@ -118,7 +120,7 @@ public class UploadController extends HttpServlet {
 
                         // Code for adding a new data points to the database attached to the study
                         sql = "INSERT INTO DataPoint (studyTitle, dpMeasurment, dpUnit, dpDate, dpLatitude, dpLongitde, dpAltitude) "
-                                + "VALUES('" + title + "'," + measurement + ", '" + unit + "', STR_TO_DATE('" + date + "', '%Y,%m,%d')," + latitude + ", " + longitude + "," + altitude + ")";
+                                + "VALUES('" + title + "'," + measurement + ", '" + unit + "', STR_TO_DATE('" + date + "', '%Y-%m-%d')," + latitude + ", " + longitude + "," + altitude + ")";
                         stmt.execute(sql);
                     }
                 }
@@ -197,7 +199,7 @@ public class UploadController extends HttpServlet {
 
                             sql = "SELECT COUNT(authorName) FROM StudyAuthor "
                                     + "WHERE studyTitle = '" + studyTitle + "'";
-                            ResultSet x = stmt.executeQuery(sql);
+                            ResultSet x = stmt2.executeQuery(sql);
                             if (x.next()) {
                                 Authors = new String[x.getInt(1)];
 
@@ -205,7 +207,7 @@ public class UploadController extends HttpServlet {
 
                             sql = "SELECT authorName FROM StudyAuthor "
                                     + "WHERE studyTitle = '" + studyTitle + "'";
-                            ResultSet authors = stmt.executeQuery(sql);
+                            ResultSet authors = stmt2.executeQuery(sql);
 
                             for (int j = 0; j < Authors.length; j++) {
                                 if (authors.next()) {
@@ -215,7 +217,7 @@ public class UploadController extends HttpServlet {
 
                             sql = "SELECT COUNT(*) FROM DataPoint "
                                     + "WHERE studyTitle = '" + studyTitle + "'";
-                            ResultSet y = stmt.executeQuery(sql);
+                            ResultSet y = stmt2.executeQuery(sql);
 
                             if (y.next()) {
                                 DataPoints = new DataPoint[y.getInt(1)];
@@ -223,7 +225,7 @@ public class UploadController extends HttpServlet {
 
                             sql = "SELECT * FROM DataPoint "
                                     + "WHERE studyTitle = '" + studyTitle + "'";
-                            ResultSet dataPoints = stmt.executeQuery(sql);
+                            ResultSet dataPoints = stmt2.executeQuery(sql);
 
                             for(int k = 0; k < DataPoints.length; k++){
                                 if(dataPoints.next()){
